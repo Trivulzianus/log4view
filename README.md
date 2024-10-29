@@ -46,8 +46,8 @@ Follow these steps to run log4view on your local machine:
 To create a network graph from your logs, follow these simple steps:
 
 1. Prepare your log data.
-2. Load the data into the program.
-3. Select your preferred layout.
+2. Run the program. You will be prompted to link the file path to your logs. You will also be required to enter a secondary key, which will be used to create the relationship between the nodes.
+3. Load the data into the program. Ensure your logs are in JSON or CSV format.
 4. Generate and explore the network graph.
 
 ```bash
@@ -56,7 +56,7 @@ python main.py --log_path <path_to_your_log_file>
 
 ## Modules
 
-Our project is modular to help you extend and modify it easily. Here's a brief overview of what each module does:
+My project is modular to help you extend and modify it easily. Here's a brief overview of what each module does:
 
 ### 1. App Layout
 
@@ -76,7 +76,7 @@ Handles the core logic, processing raw log data into structured graph representa
 
 ## Contributing
 
-We welcome contributions! Whether it's bug reporting, feature requests, or proposing changes, please see our contribution guidelines and join our community of developers and data enthusiasts.
+I welcome contributions! Whether it's bug reporting, feature requests, or proposing changes.
 
 1. Fork the repository.
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`).
