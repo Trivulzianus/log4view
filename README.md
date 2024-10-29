@@ -51,7 +51,7 @@ To create a network graph from your logs, follow these simple steps:
 4. Generate and explore the network graph.
 
 ```bash
-python main.py --log_path <path_to_your_log_file>
+python main.py <path_to_file>, <secondary_key>
 ```
 
 ## Modules
