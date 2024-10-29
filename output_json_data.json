@@ -1,0 +1,226 @@
+{
+  "Alex": {
+    "description": "User started the Introduction section.",
+    "time_spent_sec": 120,
+    "actions": "complete",
+    "score": null,
+    "retries": 0,
+    "engagement_level": "high"
+  },
+  "Ana": {
+    "description": "User reviewed introductory material.",
+    "time_spent_sec": 300,
+    "actions": "pause",
+    "score": null,
+    "retries": 0,
+    "engagement_level": "medium"
+  },
+  "Belle": {
+    "description": "User engaged with Basics of Security module.",
+    "time_spent_sec": 450,
+    "actions": "complete",
+    "score": 85,
+    "retries": 1,
+    "engagement_level": "high"
+  },
+  "Bob": {
+    "description": "User replayed Basics quiz.",
+    "time_spent_sec": 200,
+    "actions": "rewind",
+    "score": 90,
+    "retries": 1,
+    "engagement_level": "medium"
+  },
+  "Charlie": {
+    "description": "User started the Intermediate Concepts module.",
+    "time_spent_sec": 500,
+    "actions": "skip",
+    "score": null,
+    "retries": 2,
+    "engagement_level": "low"
+  },
+  "Django": {
+    "description": "User completed the Module on Data Security.",
+    "time_spent_sec": 600,
+    "actions": "complete",
+    "score": 78,
+    "retries": 0,
+    "engagement_level": "high"
+  },
+  "Eric": {
+    "description": "User attempted Data Protection Exercises.",
+    "time_spent_sec": 540,
+    "actions": "complete",
+    "score": 82,
+    "retries": 2,
+    "engagement_level": "medium"
+  },
+  "Felix": {
+    "description": "User engaged in Password Management task.",
+    "time_spent_sec": 320,
+    "actions": "pause",
+    "score": null,
+    "retries": 1,
+    "engagement_level": "medium"
+  },
+  "Graham": {
+    "description": "User completed Access Control Overview.",
+    "time_spent_sec": 480,
+    "actions": "complete",
+    "score": 70,
+    "retries": 0,
+    "engagement_level": "high"
+  },
+  "Hercules": {
+    "description": "User worked through Authentication Protocols.",
+    "time_spent_sec": 560,
+    "actions": "rewind",
+    "score": 60,
+    "retries": 3,
+    "engagement_level": "low"
+  },
+  "Ina": {
+    "description": "User began Threat Modeling basics.",
+    "time_spent_sec": 600,
+    "actions": "complete",
+    "score": 88,
+    "retries": 0,
+    "engagement_level": "high"
+  },
+  "Joey": {
+    "description": "User explored Common Vulnerabilities section.",
+    "time_spent_sec": 500,
+    "actions": "pause",
+    "score": null,
+    "retries": 2,
+    "engagement_level": "medium"
+  },
+  "Karl": {
+    "description": "User completed Exercises on XSS vulnerabilities.",
+    "time_spent_sec": 460,
+    "actions": "complete",
+    "score": 95,
+    "retries": 0,
+    "engagement_level": "high"
+  },
+  "Louie": {
+    "description": "User struggled with SQL Injection exercises.",
+    "time_spent_sec": 550,
+    "actions": "rewind",
+    "score": 50,
+    "retries": 5,
+    "engagement_level": "low"
+  },
+  "Max": {
+    "description": "User began Module on Secure Code Practices.",
+    "time_spent_sec": 480,
+    "actions": "pause",
+    "score": null,
+    "retries": 1,
+    "engagement_level": "medium"
+  },
+  "Nour": {
+    "description": "User completed Input Validation practices.",
+    "time_spent_sec": 530,
+    "actions": "complete",
+    "score": 92,
+    "retries": 0,
+    "engagement_level": "high"
+  },
+  "Oliver": {
+    "description": "User engaged with Secure Configuration Management.",
+    "time_spent_sec": 420,
+    "actions": "skip",
+    "score": null,
+    "retries": 0,
+    "engagement_level": "medium"
+  },
+  "Pony": {
+    "description": "User completed Advanced Network Security tasks.",
+    "time_spent_sec": 610,
+    "actions": "complete",
+    "score": 88,
+    "retries": 1,
+    "engagement_level": "high"
+  },
+  "Qoren": {
+    "description": "User explored Cryptographic Practices module.",
+    "time_spent_sec": 570,
+    "actions": "rewind",
+    "score": 76,
+    "retries": 2,
+    "engagement_level": "medium"
+  },
+  "Robert": {
+    "description": "User finished PKI and Encryption task.",
+    "time_spent_sec": 500,
+    "actions": "complete",
+    "score": 89,
+    "retries": 0,
+    "engagement_level": "high"
+  },
+  "Sally": {
+    "description": "User began Risk Assessment Techniques.",
+    "time_spent_sec": 480,
+    "actions": "pause",
+    "score": null,
+    "retries": 3,
+    "engagement_level": "low"
+  },
+  "Tom": {
+    "description": "User completed Security Monitoring module.",
+    "time_spent_sec": 530,
+    "actions": "complete",
+    "score": 93,
+    "retries": 0,
+    "engagement_level": "high"
+  },
+  "Una": {
+    "description": "User reviewed Incident Response protocol.",
+    "time_spent_sec": 610,
+    "actions": "rewind",
+    "score": null,
+    "retries": 2,
+    "engagement_level": "medium"
+  },
+  "Violet": {
+    "description": "User struggled with Malware Analysis basics.",
+    "time_spent_sec": 650,
+    "actions": "pause",
+    "score": 55,
+    "retries": 400000,
+    "engagement_level": "low"
+  },
+  "Watson": {
+    "description": "User completed Digital Forensics Exercises.",
+    "time_spent_sec": 600,
+    "actions": "complete",
+    "score": 90,
+    "retries": 0,
+    "engagement_level": "high"
+  },
+  "Xarlie": {
+    "description": "User practiced Secure Application Deployment.",
+    "time_spent_sec": 520,
+    "actions": "complete",
+    "score": 87,
+    "retries": 1,
+    "engagement_level": "medium"
+  },
+  "Yolanda": {
+    "description": "User finalized training with Policy Compliance.",
+    "time_spent_sec": 480,
+    "actions": "complete",
+    "score": 94,
+    "retries": 0,
+    "engagement_level": "high"
+  },
+  "Zoro": {
+    "description": "User completed course with Evaluation task.",
+    "time_spent_sec": 450,
+    "actions": "complete",
+    "score": 98,
+    "retries": 0,
+    "engagement_level": "high"
+  }
+}
