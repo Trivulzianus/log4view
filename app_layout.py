@@ -1,5 +1,6 @@
 from dash import dcc, html
-from create_figure import create_figure
+from typing import List
+import plotly.graph_objs as go
 
 
 def create_layout(figure):
@@ -14,7 +15,10 @@ def create_layout(figure):
                 'margin-bottom': '20px'
             }
         ),
-        dcc.Store(id='store-clicked-node', data={'node': None}),  # Store for tracking clicked node
+        # Store to keep track of the clicked node and graph index
+        dcc.Store(id='store-data', data={'clicked_node': None, 'graph_index': 0}),
+
+        # Graph display area
         html.Div(
             dcc.Graph(id='network-graph', figure=figure, style={
                 'width': '100%',
@@ -29,7 +33,14 @@ def create_layout(figure):
                 'display': 'flex',
                 'justify-content': 'center'
             }
-        )
+        ),
+
+        # Navigation buttons for switching graphs
+        html.Div([
+            html.Button('<', id='prev-btn', n_clicks=0),
+            html.Button('>', id='next-btn', n_clicks=0)
+        ], style={'display': 'flex', 'justify-content': 'space-between', 'width': '200px', 'margin': '20px auto'})
+
     ], style={
         'display': 'flex',
         'flex-direction': 'column',

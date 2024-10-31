@@ -4,27 +4,15 @@ from dash.dependencies import Input, Output, State
 import networkx as nx
 from app_layout import create_layout
 from create_figure import create_figure
-from process_graph import process_graph
+from process_graph import initialize_graph
 
 # Initialize Dash app
 app = dash.Dash(__name__)
 G = nx.DiGraph()
 
-def initialize_graph(user_input=None):
-    secondary_key = 'actions'
-    if not user_input:
-        process_graph(G=G, file_path='output_json_data.json', secondary_key=secondary_key)
-        return 'output_json_data.json', secondary_key
-    else:
-        file_path, secondary_key = user_input.split(',')
-        file_path = file_path.strip()
-        secondary_key = secondary_key.strip()
-        process_graph(G=G, file_path=file_path, secondary_key=secondary_key)
-        return file_path, secondary_key
-
 # Handle user input once
-user_input = input('Enter data in the form [file_path, secondary_key] (or leave empty for default): ')
-output_json_data_file, secondary_key = initialize_graph(user_input)
+user_input = input('Enter data in the form [file_path, secondary_key] (or leave empty for example): ')
+output_json_data_file, secondary_key, G = initialize_graph(user_input=user_input, G=G)
 
 with open(output_json_data_file, 'r') as f:
     output_json_data = json.load(f)
@@ -41,40 +29,65 @@ app.layout = create_layout(figure=figure)
 # Unified callback to handle node clicks and update the graph
 @app.callback(
     Output('network-graph', 'figure'),
-    Output('store-clicked-node', 'data'),
+    Output('store-data', 'data'),
     Input('network-graph', 'clickData'),
-    State('store-clicked-node', 'data'),
+    Input('next-btn', 'n_clicks'),
+    Input('prev-btn', 'n_clicks'),
+    State('store-data', 'data'),
     prevent_initial_call=True
 )
-def update_graph(clickData, store_data):
+def update_graph(clickData, n_clicks_next, n_clicks_prev, store_data):
+    # Get the current clicked node and graph index from the store data
+    clicked_node = store_data.get('clicked_node')
+    graph_index = store_data.get('graph_index', 1)  # Default to 1 if not set
+    internal_output_json_data_file, internal_secondary_key, updated_G = initialize_graph(user_input=user_input, G=G,
+                                                                              index=graph_index)
+    # Generate positions for nodes with spring layout for improved visual spacing
+    updated_pos = nx.spring_layout(updated_G, k=0.45, seed=42)
     if clickData:
-        clicked_node = clickData['points'][0]['text']
-        relevant_nodes = []
+        # Extract the new clicked node from clickData
+        new_clicked_node = clickData['points'][0]['text']
 
-        # Iterate through all edges in the graph
-        for source, target in G.edges():
-            if clicked_node in target:
-                relevant_nodes.append(source)  # Add target to the list if condition is met
+        # Identify relevant nodes connected to the clicked node
+        relevant_nodes = [source for source, target in G.edges() if new_clicked_node in target]
 
-        print(f"Nodes containing {clicked_node}:", relevant_nodes)
-        new_edges = []
-        for node in relevant_nodes:
-            G.add_edge(clicked_node, node)
-            # Keep track of new edges to remove after resetting
-            new_edges.append((clicked_node, node))
+        # Update the graph with new edges connected to the clicked node
+        new_edges = [(new_clicked_node, node) for node in relevant_nodes]
+        updated_G.add_edges_from(new_edges)
 
-        # If clicked node matches the stored node, reset to original view
-        if store_data['node'] == clicked_node:
-            G.remove_edges_from(new_edges)
-            return create_figure(G=G, pos=pos, output_json_data=output_json_data), {
-                'node': None}  # Reset to original view
+        # If clicked node matches the stored node, reset the graph
+        if clicked_node == new_clicked_node:
+            updated_G.remove_edges_from(new_edges)
+            return (
+                create_figure(G=updated_G, pos=updated_pos, output_json_data=internal_output_json_data_file,
+                              secondary_key=internal_secondary_key),
+                {'clicked_node': None, 'graph_index': graph_index}  # Reset clicked node but keep graph index
+            )
 
-        # Store the clicked node
-        new_store_data = {'node': clicked_node}
-        return create_figure(G=G, pos=pos, output_json_data=output_json_data, clickData=clickData), new_store_data
+        # Update the store with the new clicked node while keeping the graph index
+        new_store_data = {'clicked_node': new_clicked_node, 'graph_index': graph_index}
+        return (
+            create_figure(G=updated_G, pos=updated_pos, output_json_data=internal_output_json_data_file,
+                          secondary_key=internal_secondary_key),
+            new_store_data
+        )
 
-    return create_figure(G=G, pos=pos, output_json_data=output_json_data,
-                         clickData=clickData), store_data  # Return original view if no click data
+    # Handle next/previous button clicks
+    triggered_id = dash.callback_context.triggered[0]['prop_id'].split('.')[0]
+    if triggered_id == 'next-btn':
+        graph_index = (graph_index + 1) % 5  # Cycle through graphs
+    elif triggered_id == 'prev-btn':
+        graph_index = (graph_index - 1) % 5
+
+    # Update the store data with the new graph index while keeping the clicked node
+    updated_store_data = {'clicked_node': clicked_node, 'graph_index': graph_index}
+
+    # Return the updated figure for the new graph index and the store data
+    return (
+        create_figure(G=updated_G, pos=updated_pos, output_json_data=internal_output_json_data_file, secondary_key=secondary_key),
+        updated_store_data
+    )
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)

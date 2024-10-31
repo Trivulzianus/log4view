@@ -1,5 +1,6 @@
 import plotly.graph_objs as go
 
+
 def create_figure(pos, output_json_data, G, secondary_key, clickData=None):
     edge_x, edge_y, node_x, node_y, node_text, node_hovertext, node_color = [], [], [], [], [], [], {}
 
@@ -98,7 +99,6 @@ def create_figure(pos, output_json_data, G, secondary_key, clickData=None):
         hoverinfo='none',
         mode='lines'
     )
-
 
     node_colors_ordered = [value for key, value in node_color.items()]
     node_text_ordered = [key for key, value, in node_color.items()]

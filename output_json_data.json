@@ -196,7 +196,7 @@
     "time_spent_sec": 600,
     "actions": "complete",
     "score": 90,
-    "retries": 0,
+    "retries": 15,
     "engagement_level": "high"
   },
   "Xarlie": {
@@ -204,7 +204,7 @@
     "time_spent_sec": 520,
     "actions": "complete",
     "score": 87,
-    "retries": 1,
+    "retries": 11,
     "engagement_level": "medium"
   },
   "Yolanda": {
@@ -212,7 +212,7 @@
     "time_spent_sec": 480,
     "actions": "complete",
     "score": 94,
-    "retries": 0,
+    "retries": 10,
     "engagement_level": "high"
   },
   "Zoro": {
@@ -220,7 +220,7 @@
     "time_spent_sec": 450,
     "actions": "complete",
     "score": 98,
-    "retries": 0,
+    "retries": 120,
     "engagement_level": "high"
   }
 }
