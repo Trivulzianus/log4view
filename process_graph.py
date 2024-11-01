@@ -35,15 +35,18 @@ def paginate_json(output_json_data, secondary_key, index) -> List[PaginationObje
     paginationObject_list = create_paginationObject_list(json_data=output_json_data, secondary_key=secondary_key)
     paginationObject_list_sorted = sorted(paginationObject_list, key=lambda x: x.get()[1][1])
     paginated_json_dict_of_lists = {}
+    paginated_json_list = []
+    main_nodes = []
+    for PagObj in paginationObject_list_sorted:
+        if PagObj.get()[1][1] not in main_nodes:
+            main_nodes.append(PagObj.get()[1][1])
     for i in range(1, 6):
         paginated_json_list = []
-        count_main_nodes = set()
+        current_nodes = main_nodes[(i-1)*5:i*5]
         for PagObj in paginationObject_list_sorted:
-            count_main_nodes.add(PagObj.get()[1][1])
-            paginated_json_list.append(PagObj)
-            if len(count_main_nodes) == 5:
-                break
-        paginated_json_dict_of_lists[index] = paginated_json_list
+            if PagObj.get()[1][1] in current_nodes:
+                paginated_json_list.append(PagObj)
+        paginated_json_dict_of_lists[i] = paginated_json_list
     return paginated_json_dict_of_lists[index]
 
 
@@ -62,6 +65,7 @@ def process_graph(G, file_path, secondary_key, index):
                 raise ValueError("Unsupported file type: {}".format(file_extension))
             paginated_json_list = paginate_json(output_json_data=output_json_data, secondary_key=secondary_key,
                                                 index=index)
+            G.clear()
             for paginated_object in paginated_json_list:
                 try:
                     G.add_edge(paginated_object.get()[0], paginated_object.get()[1][1])
@@ -75,7 +79,7 @@ def process_graph(G, file_path, secondary_key, index):
 
 
 # Create (outer_key, secondary_key, JSON) structure, for pagination purposes
-def create_paginationObject_list(json_data, secondary_key, n=25):
+def create_paginationObject_list(json_data, secondary_key, n=100):
     PaginationObjectList = []
 
     # Iterate through outer JSON keys

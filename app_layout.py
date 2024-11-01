@@ -16,7 +16,7 @@ def create_layout(figure):
             }
         ),
         # Store to keep track of the clicked node and graph index
-        dcc.Store(id='store-data', data={'clicked_node': None, 'graph_index': 0}),
+        dcc.Store(id='store-data', data={'clicked_node': None, 'graph_index': 1}),
 
         # Graph display area
         html.Div(
