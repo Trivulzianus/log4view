@@ -2,7 +2,7 @@
 
 Welcome to log4view! This tool leverages the power of NetworkX and Plotly to transform raw logs into visually compelling network graphs, offering a new dimension to log data interpretation. Whether you're a network engineer, data scientist, or just curious about your log data, this program provides insightful visualizations that help you understand and explore complex networks.
 
-![Alt text](log4view.png)
+![Alt text](log4view2.png)
 
 ## Table of Contents
 
