@@ -20,7 +20,7 @@ def initialize_graph(G, user_input=None, index=1):
         total_pages = process_graph(G=G, file_path='output_json_data.json', secondary_key=secondary_key, index=index)
         with open(file='output_json_data.json', mode='r') as f:
             output_json_data = json.load(f)
-        return output_json_data, secondary_key, G
+        return output_json_data, secondary_key, G, total_pages
     else:
         file_path, secondary_key = user_input.split(',')
         file_path = file_path.strip()
