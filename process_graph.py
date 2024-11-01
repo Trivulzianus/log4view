@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import json
+from typing import List
 
 
 class PaginationObject:
@@ -17,31 +18,33 @@ def initialize_graph(G, user_input=None, index=1):
     secondary_key = 'actions'
     if not user_input:
         process_graph(G=G, file_path='output_json_data.json', secondary_key=secondary_key, index=index)
-        return 'output_json_data.json', secondary_key
+        with open(file='output_json_data.json', mode='r') as f:
+            output_json_data = json.load(f)
+        return output_json_data, secondary_key, G
     else:
         file_path, secondary_key = user_input.split(',')
         file_path = file_path.strip()
+        with open(file=file_path, mode='r') as f:
+            output_json_data = json.load(f)
         secondary_key = secondary_key.strip()
         process_graph(G=G, file_path=file_path, secondary_key=secondary_key, index=index)
-        return file_path, secondary_key, G
+        return output_json_data, secondary_key, G
 
 
-def paginate_json(output_json_data, secondary_key, index):
+def paginate_json(output_json_data, secondary_key, index) -> List[PaginationObject]:
     paginationObject_list = create_paginationObject_list(json_data=output_json_data, secondary_key=secondary_key)
-    paginated_json_list = []
-    for i in range(5):
-        sliced_PaginationObject_list = paginationObject_list[(i - 1) * 5:i * 5]
-        paginated_json = {}
-        for PagObj in sliced_PaginationObject_list:
-            # Reminder: paginationObject is of structure [Outer_key, [Inner_key, [secondary_key]], rest_of_json {key:
-            # value} pairs)
-            outer_key = PagObj.get()[0]
-            inner_key_value_pair = PagObj.get()[1]
-            rest_of_json = PagObj.get()[2]
-            rest_of_json[PagObj.get()[1][0]] = PagObj.get()[1][1]
-            paginated_json[outer_key] = rest_of_json
-        paginated_json_list.append(paginated_json)
-    return paginated_json_list[index]
+    paginationObject_list_sorted = sorted(paginationObject_list, key=lambda x: x.get()[1][1])
+    paginated_json_dict_of_lists = {}
+    for i in range(1, 6):
+        paginated_json_list = []
+        count_main_nodes = set()
+        for PagObj in paginationObject_list_sorted:
+            count_main_nodes.add(PagObj.get()[1][1])
+            paginated_json_list.append(PagObj)
+            if len(count_main_nodes) == 5:
+                break
+        paginated_json_dict_of_lists[index] = paginated_json_list
+    return paginated_json_dict_of_lists[index]
 
 
 def process_graph(G, file_path, secondary_key, index):
@@ -57,9 +60,13 @@ def process_graph(G, file_path, secondary_key, index):
                 output_json_data = json.load(f)
             else:
                 raise ValueError("Unsupported file type: {}".format(file_extension))
-            paginated_json = paginate_json(output_json_data=output_json_data, secondary_key=secondary_key, index=index)
-            for val, data in paginated_json.items():
-                G.add_edge(val, data[secondary_key])
+            paginated_json_list = paginate_json(output_json_data=output_json_data, secondary_key=secondary_key,
+                                                index=index)
+            for paginated_object in paginated_json_list:
+                try:
+                    G.add_edge(paginated_object.get()[0], paginated_object.get()[1][1])
+                except KeyError:
+                    print(f"{paginated_object.get()[1][1]} has no {secondary_key}")
             return G
 
         except Exception as e:

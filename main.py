@@ -12,10 +12,7 @@ G = nx.DiGraph()
 
 # Handle user input once
 user_input = input('Enter data in the form [file_path, secondary_key] (or leave empty for example): ')
-output_json_data_file, secondary_key, G = initialize_graph(user_input=user_input, G=G)
-
-with open(output_json_data_file, 'r') as f:
-    output_json_data = json.load(f)
+output_json_data, secondary_key, G = initialize_graph(user_input=user_input, G=G)
 
 # Generate positions for nodes with spring layout for improved visual spacing
 pos = nx.spring_layout(G, k=0.45, seed=42)
@@ -39,12 +36,14 @@ app.layout = create_layout(figure=figure)
 def update_graph(clickData, n_clicks_next, n_clicks_prev, store_data):
     # Get the current clicked node and graph index from the store data
     clicked_node = store_data.get('clicked_node')
-    graph_index = store_data.get('graph_index', 1)  # Default to 1 if not set
+    graph_index = store_data.get('graph_index', 1) % 5  # Default to 1 if not set, rotate around 5 thanks to modulo
     internal_output_json_data_file, internal_secondary_key, updated_G = initialize_graph(user_input=user_input, G=G,
                                                                               index=graph_index)
     # Generate positions for nodes with spring layout for improved visual spacing
     updated_pos = nx.spring_layout(updated_G, k=0.45, seed=42)
     if clickData:
+        internal_output_json_data_file, internal_secondary_key, updated_G = initialize_graph(user_input=user_input, G=G,
+                                                                                             index=graph_index)
         # Extract the new clicked node from clickData
         new_clicked_node = clickData['points'][0]['text']
 
@@ -77,14 +76,15 @@ def update_graph(clickData, n_clicks_next, n_clicks_prev, store_data):
     if triggered_id == 'next-btn':
         graph_index = (graph_index + 1) % 5  # Cycle through graphs
     elif triggered_id == 'prev-btn':
-        graph_index = (graph_index - 1) % 5
+        graph_index = (graph_index - 1) % 5  # Cycle through graphs
 
     # Update the store data with the new graph index while keeping the clicked node
     updated_store_data = {'clicked_node': clicked_node, 'graph_index': graph_index}
 
     # Return the updated figure for the new graph index and the store data
     return (
-        create_figure(G=updated_G, pos=updated_pos, output_json_data=internal_output_json_data_file, secondary_key=secondary_key),
+        create_figure(G=updated_G, pos=updated_pos, output_json_data=internal_output_json_data_file,
+                      secondary_key=secondary_key),
         updated_store_data
     )
 
