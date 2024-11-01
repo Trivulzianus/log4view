@@ -41,35 +41,35 @@ def update_graph(clickData, n_clicks_next, n_clicks_prev, store_data):
                                                                               index=graph_index)
     # Generate positions for nodes with spring layout for improved visual spacing
     updated_pos = nx.spring_layout(updated_G, k=0.4, seed=42)
-    if clickData:
-        internal_output_json_data_file, internal_secondary_key, updated_G = initialize_graph(user_input=user_input, G=G,
-                                                                                             index=graph_index)
-        # Extract the new clicked node from clickData
-        new_clicked_node = clickData['points'][0]['text']
-
-        # Identify relevant nodes connected to the clicked node
-        relevant_nodes = [source for source, target in G.edges() if new_clicked_node in target]
-
-        # Update the graph with new edges connected to the clicked node
-        new_edges = [(new_clicked_node, node) for node in relevant_nodes]
-        updated_G.add_edges_from(new_edges)
-
-        # If clicked node matches the stored node, reset the graph
-        if clicked_node == new_clicked_node:
-            updated_G.remove_edges_from(new_edges)
-            return (
-                create_figure(G=updated_G, pos=updated_pos, output_json_data=internal_output_json_data_file,
-                              secondary_key=internal_secondary_key),
-                {'clicked_node': None, 'graph_index': graph_index}  # Reset clicked node but keep graph index
-            )
-
-        # Update the store with the new clicked node while keeping the graph index
-        new_store_data = {'clicked_node': new_clicked_node, 'graph_index': graph_index}
-        return (
-            create_figure(G=updated_G, pos=updated_pos, output_json_data=internal_output_json_data_file,
-                          secondary_key=internal_secondary_key),
-            new_store_data
-        )
+    # if clickData:
+    #     internal_output_json_data_file, internal_secondary_key, updated_G = initialize_graph(user_input=user_input, G=G,
+    #                                                                                          index=graph_index)
+    #     # Extract the new clicked node from clickData
+    #     new_clicked_node = clickData['points'][0]['text']
+    #
+    #     # Identify relevant nodes connected to the clicked node
+    #     relevant_nodes = [source for source, target in G.edges() if new_clicked_node in target]
+    #
+    #     # Update the graph with new edges connected to the clicked node
+    #     new_edges = [(new_clicked_node, node) for node in relevant_nodes]
+    #     updated_G.add_edges_from(new_edges)
+    #
+    #     # If clicked node matches the stored node, reset the graph
+    #     if clicked_node == new_clicked_node:
+    #         updated_G.remove_edges_from(new_edges)
+    #         return (
+    #             create_figure(G=updated_G, pos=updated_pos, output_json_data=internal_output_json_data_file,
+    #                           secondary_key=internal_secondary_key),
+    #             {'clicked_node': None, 'graph_index': graph_index}  # Reset clicked node but keep graph index
+    #         )
+    #
+    #     # Update the store with the new clicked node while keeping the graph index
+    #     new_store_data = {'clicked_node': new_clicked_node, 'graph_index': graph_index}
+    #     return (
+    #         create_figure(G=updated_G, pos=updated_pos, output_json_data=internal_output_json_data_file,
+    #                       secondary_key=internal_secondary_key),
+    #         new_store_data
+    #     )
 
     # Handle next/previous button clicks
     triggered_id = dash.callback_context.triggered[0]['prop_id'].split('.')[0]

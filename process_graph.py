@@ -32,7 +32,7 @@ def initialize_graph(G, user_input=None, index=1):
 
 
 def paginate_json(output_json_data, secondary_key, index) -> List[PaginationObject]:
-    acceptable_number_of_nodes_in_page = 20
+    acceptable_number_of_nodes_in_page = 30
 
     # Create a list of PaginationObjects
     paginationObject_list = create_paginationObject_list(json_data=output_json_data, secondary_key=secondary_key)
