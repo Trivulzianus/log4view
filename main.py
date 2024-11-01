@@ -15,7 +15,7 @@ user_input = input('Enter data in the form [file_path, secondary_key] (or leave 
 output_json_data, secondary_key, G = initialize_graph(user_input=user_input, G=G)
 
 # Generate positions for nodes with spring layout for improved visual spacing
-pos = nx.spring_layout(G, k=0.45, seed=42)
+pos = nx.spring_layout(G, k=0.8, seed=42)
 
 # Create figure
 figure = create_figure(pos=pos, output_json_data=output_json_data, G=G, secondary_key=secondary_key, clickData=None)
@@ -77,12 +77,12 @@ def update_graph(clickData, n_clicks_next, n_clicks_prev, store_data):
         graph_index = (graph_index + 1) % 5  # Cycle through graphs
         internal_output_json_data_file, internal_secondary_key, updated_G = initialize_graph(user_input=user_input, G=G,
                                                                                              index=graph_index)
-        updated_pos = nx.spring_layout(updated_G, k=0.45, seed=42)
+        updated_pos = nx.spring_layout(updated_G, k=0.8, seed=42)
     elif triggered_id == 'prev-btn':
         graph_index = (graph_index - 1) % 5  # Cycle through graphs
         internal_output_json_data_file, internal_secondary_key, updated_G = initialize_graph(user_input=user_input, G=G,
                                                                                              index=graph_index)
-        updated_pos = nx.spring_layout(updated_G, k=0.45, seed=42)
+        updated_pos = nx.spring_layout(updated_G, k=0.8, seed=42)
 
     # Update the store data with the new graph index while keeping the clicked node
     updated_store_data = {'clicked_node': clicked_node, 'graph_index': graph_index}

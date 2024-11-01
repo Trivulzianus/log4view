@@ -35,14 +35,14 @@ def paginate_json(output_json_data, secondary_key, index) -> List[PaginationObje
     paginationObject_list = create_paginationObject_list(json_data=output_json_data, secondary_key=secondary_key)
     paginationObject_list_sorted = sorted(paginationObject_list, key=lambda x: x.get()[1][1])
     paginated_json_dict_of_lists = {}
-    paginated_json_list = []
+    NUM_OF_MAIN_NODES = 2
     main_nodes = []
     for PagObj in paginationObject_list_sorted:
         if PagObj.get()[1][1] not in main_nodes:
             main_nodes.append(PagObj.get()[1][1])
-    for i in range(1, 6):
+    for i in range(1, NUM_OF_MAIN_NODES):
         paginated_json_list = []
-        current_nodes = main_nodes[(i-1)*5:i*5]
+        current_nodes = main_nodes[(i-1)*NUM_OF_MAIN_NODES:i*NUM_OF_MAIN_NODES]
         for PagObj in paginationObject_list_sorted:
             if PagObj.get()[1][1] in current_nodes:
                 paginated_json_list.append(PagObj)

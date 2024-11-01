@@ -3,7 +3,13 @@ import plotly.graph_objs as go
 
 def create_figure(pos, output_json_data, G, secondary_key, clickData=None):
     edge_x, edge_y, node_x, node_y, node_text, node_hovertext, node_color = [], [], [], [], [], [], {}
-
+    color_palettes = [
+        ["#FF5733", "#FFBD33"],  # Palette 1 - Red
+        ["#33FF57", "#33FFBD"],  # Palette 2 - Green
+        ["#5733FF", "#BD33FF"],  # Palette 3 - Purple
+        ["#33A1FF", "#33C3FF"],  # Palette 4 - Blue
+        ["#FF33A1", "#FF33C3"],  # Palette 5 - Pink
+    ]
     scale_factor = 0.7
 
     # If a node is clicked, show that node and its neighbors
@@ -70,15 +76,26 @@ def create_figure(pos, output_json_data, G, secondary_key, clickData=None):
             edge_x.extend([scaled_x0, scaled_x1, None])
             edge_y.extend([scaled_y0, scaled_y1, None])
 
-        # Populate node information for the initial view
-        count_node = 0
+        color_palette_nodes = {}
+        main_node_color_count = 0
+        main_nodes = []
         for node in G.nodes():
-            count_node += 1
             # Check if the node is an endpoint (no outgoing edges)
-            if G.out_degree(node) == 0:
-                node_color[node] = '#3498db'  # Blue for endpoint nodes
-            else:
-                node_color[node] = '#e74c3c'  # Red for other nodes
+            is_main_node = G.out_degree(node) == 0
+            if is_main_node:
+                color_palette_nodes[node] = color_palettes[main_node_color_count]
+                node_color[node] = color_palettes[main_node_color_count][0]
+                main_node_color_count += 1
+                main_nodes.append(node)
+        for node in G.nodes():
+            is_main_node = G.out_degree(node) == 0
+            if is_main_node:
+                node_color[node] = color_palette_nodes[node][0]
+            if not is_main_node:
+                for main_node in main_nodes:
+                    if G.has_edge(node, main_node):
+                        node_color[node] = color_palette_nodes[main_node][0]
+        # Populate node information for the initial view
             x, y = pos[node]
             node_x.append(x)
             node_y.append(y)
@@ -100,19 +117,15 @@ def create_figure(pos, output_json_data, G, secondary_key, clickData=None):
         mode='lines'
     )
 
-    node_colors_ordered = [value for key, value in node_color.items()]
-    node_text_ordered = [key for key, value, in node_color.items()]
-    node_sizes = [len(str(key)) * 11 for key, value, in node_color.items()]
-
     node_trace = go.Scatter(
         x=node_x, y=node_y,
         mode='markers+text',
-        text=node_text_ordered,
+        text=node_text,
         hoverinfo='text',
         hovertext=node_hovertext,
         marker=dict(
-            color=node_colors_ordered,
-            size=node_sizes,
+            color=[node_color[node] for node in node_text],
+            size=[len(str(node)) * 10 for node in node_text],
             opacity=0.2
         )
     )
