@@ -17,7 +17,7 @@ class PaginationObject:
 def initialize_graph(G, user_input=None, index=1):
     secondary_key = 'actions'
     if not user_input:
-        process_graph(G=G, file_path='output_json_data.json', secondary_key=secondary_key, index=index)
+        total_pages = process_graph(G=G, file_path='output_json_data.json', secondary_key=secondary_key, index=index)
         with open(file='output_json_data.json', mode='r') as f:
             output_json_data = json.load(f)
         return output_json_data, secondary_key, G
@@ -27,8 +27,8 @@ def initialize_graph(G, user_input=None, index=1):
         with open(file=file_path, mode='r') as f:
             output_json_data = json.load(f)
         secondary_key = secondary_key.strip()
-        process_graph(G=G, file_path=file_path, secondary_key=secondary_key, index=index)
-        return output_json_data, secondary_key, G
+        total_pages = process_graph(G=G, file_path=file_path, secondary_key=secondary_key, index=index)
+        return output_json_data, secondary_key, G, total_pages
 
 
 def paginate_json(output_json_data, secondary_key, index) -> List[PaginationObject]:
@@ -58,7 +58,7 @@ def paginate_json(output_json_data, secondary_key, index) -> List[PaginationObje
         paginated_json_dict_of_lists[i + 1] = paginationObject_list_sorted[start_index:end_index]
 
     # Return the requested page, ensuring it exists
-    return paginated_json_dict_of_lists.get(index, [])
+    return paginated_json_dict_of_lists.get(index, []), total_pages
 
 
 def process_graph(G, file_path, secondary_key, index):
@@ -74,7 +74,7 @@ def process_graph(G, file_path, secondary_key, index):
                 output_json_data = json.load(f)
             else:
                 raise ValueError("Unsupported file type: {}".format(file_extension))
-            paginated_json_list = paginate_json(output_json_data=output_json_data, secondary_key=secondary_key,
+            paginated_json_list, total_pages = paginate_json(output_json_data=output_json_data, secondary_key=secondary_key,
                                                 index=index)
             G.clear()
             for paginated_object in paginated_json_list:
@@ -84,7 +84,7 @@ def process_graph(G, file_path, secondary_key, index):
                     print(f"{paginated_object.get()[1][1]} has no {secondary_key}")
                 except Exception as e:
                     print(f"Unexpected error while processing graph: {e}")
-            return G
+            return G, total_pages
 
         except Exception as e:
             print(f"Error reading {file_path}: {e}")

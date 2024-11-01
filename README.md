@@ -10,7 +10,7 @@ Log4view accepts a file path to your data, and a secondary key. The tool will th
 
 Do reach out here for any ideas and feedback - good or bad :)
 
-![Alt text](log4view2.png)
+![Alt text](log4view.png)
 
 ## Table of Contents
 
