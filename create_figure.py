@@ -107,7 +107,7 @@ def create_figure(pos, output_json_data, G, secondary_key, clickData=None):
                 for key, value in json_data.items():
                     hover_text = hover_text + f"<b>{key}:</b> {value} <br>"
             else:
-                hover_text = f"<b>Action:</b> {node}"
+                hover_text = f"<b>{node}</b>"
             node_hovertext.append(hover_text)
 
     edge_trace = go.Scatter(

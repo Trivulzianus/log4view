@@ -32,22 +32,40 @@ def initialize_graph(G, user_input=None, index=1):
 
 
 def paginate_json(output_json_data, secondary_key, index) -> List[PaginationObject]:
+    acceptable_number_of_nodes_in_page = 50
     paginationObject_list = create_paginationObject_list(json_data=output_json_data, secondary_key=secondary_key)
+
+    # Ensure there's data to paginate
+    if len(paginationObject_list) == 0:
+        return []  # Handle empty list case
+
+    # Create a sorted list of unique main nodes
     paginationObject_list_sorted = sorted(paginationObject_list, key=lambda x: x.get()[1][1])
-    paginated_json_dict_of_lists = {}
-    NUM_OF_MAIN_NODES = 2
     main_nodes = []
+
+    # Collect unique main nodes
     for PagObj in paginationObject_list_sorted:
-        if PagObj.get()[1][1] not in main_nodes:
-            main_nodes.append(PagObj.get()[1][1])
-    for i in range(1, NUM_OF_MAIN_NODES):
+        main_node_value = PagObj.get()[1][1]
+        if main_node_value not in main_nodes:
+            main_nodes.append(main_node_value)
+
+    # Create a dictionary to hold paginated results
+    paginated_json_dict_of_lists = {}
+
+    # Iterate over each unique main node to create pages
+    for i, main_node in enumerate(main_nodes):
         paginated_json_list = []
-        current_nodes = main_nodes[(i-1)*NUM_OF_MAIN_NODES:i*NUM_OF_MAIN_NODES]
+
+        # Collect items for the current main node
         for PagObj in paginationObject_list_sorted:
-            if PagObj.get()[1][1] in current_nodes:
+            if PagObj.get()[1][1] == main_node:
                 paginated_json_list.append(PagObj)
-        paginated_json_dict_of_lists[i] = paginated_json_list
-    return paginated_json_dict_of_lists[index]
+
+        # Store the list for the current main node, with 1-based index
+        paginated_json_dict_of_lists[i + 1] = paginated_json_list[:acceptable_number_of_nodes_in_page]
+
+    # Return the requested page, ensuring it exists
+    return paginated_json_dict_of_lists.get(index, [])
 
 
 def process_graph(G, file_path, secondary_key, index):
@@ -71,6 +89,8 @@ def process_graph(G, file_path, secondary_key, index):
                     G.add_edge(paginated_object.get()[0], paginated_object.get()[1][1])
                 except KeyError:
                     print(f"{paginated_object.get()[1][1]} has no {secondary_key}")
+                except Exception as e:
+                    print(f"Unexpected error while processing graph: {e}")
             return G
 
         except Exception as e:
@@ -79,7 +99,7 @@ def process_graph(G, file_path, secondary_key, index):
 
 
 # Create (outer_key, secondary_key, JSON) structure, for pagination purposes
-def create_paginationObject_list(json_data, secondary_key, n=100):
+def create_paginationObject_list(json_data, secondary_key):
     PaginationObjectList = []
 
     # Iterate through outer JSON keys
@@ -94,9 +114,6 @@ def create_paginationObject_list(json_data, secondary_key, n=100):
             # Create a tuple with outer key, inner key, and the rest of the data
             PaginationObjectList.append(PaginationObject(outer_key, [secondary_key, inner_value], rest_data))
 
-            # Stop if we have reached the upper limit
-            if len(PaginationObjectList) >= n:
-                break
 
     return PaginationObjectList
 
