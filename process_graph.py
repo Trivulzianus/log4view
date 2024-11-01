@@ -32,37 +32,30 @@ def initialize_graph(G, user_input=None, index=1):
 
 
 def paginate_json(output_json_data, secondary_key, index) -> List[PaginationObject]:
-    acceptable_number_of_nodes_in_page = 50
+    acceptable_number_of_nodes_in_page = 20
+
+    # Create a list of PaginationObjects
     paginationObject_list = create_paginationObject_list(json_data=output_json_data, secondary_key=secondary_key)
 
     # Ensure there's data to paginate
     if len(paginationObject_list) == 0:
         return []  # Handle empty list case
 
-    # Create a sorted list of unique main nodes
+    # Optionally sort the list if needed
+    # For example, sort by the main node value
     paginationObject_list_sorted = sorted(paginationObject_list, key=lambda x: x.get()[1][1])
-    main_nodes = []
 
-    # Collect unique main nodes
-    for PagObj in paginationObject_list_sorted:
-        main_node_value = PagObj.get()[1][1]
-        if main_node_value not in main_nodes:
-            main_nodes.append(main_node_value)
+    # Calculate the total number of pages
+    total_pages = (len(paginationObject_list_sorted) + acceptable_number_of_nodes_in_page - 1) // acceptable_number_of_nodes_in_page
 
     # Create a dictionary to hold paginated results
     paginated_json_dict_of_lists = {}
 
-    # Iterate over each unique main node to create pages
-    for i, main_node in enumerate(main_nodes):
-        paginated_json_list = []
-
-        # Collect items for the current main node
-        for PagObj in paginationObject_list_sorted:
-            if PagObj.get()[1][1] == main_node:
-                paginated_json_list.append(PagObj)
-
-        # Store the list for the current main node, with 1-based index
-        paginated_json_dict_of_lists[i + 1] = paginated_json_list[:acceptable_number_of_nodes_in_page]
+    # Divide the list into pages
+    for i in range(total_pages):
+        start_index = i * acceptable_number_of_nodes_in_page
+        end_index = min(start_index + acceptable_number_of_nodes_in_page, len(paginationObject_list_sorted))
+        paginated_json_dict_of_lists[i + 1] = paginationObject_list_sorted[start_index:end_index]
 
     # Return the requested page, ensuring it exists
     return paginated_json_dict_of_lists.get(index, [])
