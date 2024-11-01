@@ -73,13 +73,14 @@ def update_graph(clickData, n_clicks_next, n_clicks_prev, store_data):
 
     # Handle next/previous button clicks
     triggered_id = dash.callback_context.triggered[0]['prop_id'].split('.')[0]
+    num_of_pages = 5
     if triggered_id == 'next-btn':
-        graph_index = (graph_index + 1) % 5 # Cycle through 5 graphs
+        graph_index = (graph_index + 1) % num_of_pages # Cycle through 5 graphs
         internal_output_json_data_file, internal_secondary_key, updated_G = initialize_graph(user_input=user_input, G=G,
                                                                                              index=graph_index)
         updated_pos = nx.spring_layout(updated_G, k=0.4, seed=42)
     elif triggered_id == 'prev-btn':
-        graph_index = (graph_index - 1) % 5  # Cycle through 5 graphs
+        graph_index = (graph_index - 1) % num_of_pages  # Cycle through 5 graphs
         internal_output_json_data_file, internal_secondary_key, updated_G = initialize_graph(user_input=user_input, G=G,
                                                                                              index=graph_index)
         updated_pos = nx.spring_layout(updated_G, k=0.4, seed=42)
