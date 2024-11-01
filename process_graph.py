@@ -17,7 +17,7 @@ class PaginationObject:
 def initialize_graph(G, user_input=None, index=1):
     secondary_key = 'actions'
     if not user_input:
-        total_pages = process_graph(G=G, file_path='output_json_data.json', secondary_key=secondary_key, index=index)
+        G, total_pages = process_graph(G=G, file_path='output_json_data.json', secondary_key=secondary_key, index=index)
         with open(file='output_json_data.json', mode='r') as f:
             output_json_data = json.load(f)
         return output_json_data, secondary_key, G, total_pages
@@ -27,7 +27,7 @@ def initialize_graph(G, user_input=None, index=1):
         with open(file=file_path, mode='r') as f:
             output_json_data = json.load(f)
         secondary_key = secondary_key.strip()
-        total_pages = process_graph(G=G, file_path=file_path, secondary_key=secondary_key, index=index)
+        G, total_pages = process_graph(G=G, file_path=file_path, secondary_key=secondary_key, index=index)
         return output_json_data, secondary_key, G, total_pages
 
 
