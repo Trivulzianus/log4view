@@ -16,7 +16,7 @@ def create_layout(figure):
             }
         ),
         # Store to keep track of the clicked node and graph index
-        dcc.Store(id='store-data', data={'clicked_node': None, 'graph_index': 1}),
+        dcc.Store(id='store-data', data={'clicked_node': None, 'graph_index': 0}),
 
         # Graph display area
         html.Div(
@@ -35,12 +35,23 @@ def create_layout(figure):
             }
         ),
 
-        # Navigation buttons for switching graphs
+        # Navigation buttons and graph index indicator
         html.Div([
             html.Button('<', id='prev-btn', n_clicks=0),
+            html.Div(id='graph-index', style={
+                'margin': '0 10px',
+                'text-align': 'center',
+                'font-size': '18px',
+                'color': '#2C3E50'
+            }),
             html.Button('>', id='next-btn', n_clicks=0)
-        ], style={'display': 'flex', 'justify-content': 'space-between', 'width': '200px', 'margin': '20px auto'})
-
+        ], style={
+            'display': 'flex',
+            'align-items': 'center',
+            'justify-content': 'center',  # Center align the graph index
+            'width': '200px',
+            'margin': '20px auto'
+        })
     ], style={
         'display': 'flex',
         'flex-direction': 'column',
