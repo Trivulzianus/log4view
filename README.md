@@ -4,7 +4,7 @@ Welcome to log4view! This tool leverages the power of NetworkX and Plotly to tra
 
 ## TL;DR
 
-Log4view is a tool for technical people who work with logs to view their data in a more visually stimulating way - in the hopes of bringing new insights and ideas. Log4view will generate up to 25 nodes per page, and 5 pages total. This is hardcoded, but you can edit the variables, which are *acceptable_number_of_nodes_in_page*, and *num_of_pages*. Ideally you will work with up to a couple hundred logs, but if you choose to expand the above variables, the sky's the limit.
+Log4view is a tool for technical people who work with logs to view their data in a more visually stimulating way - in the hopes of bringing new insights and ideas. Log4view will generate up to 25 nodes per page, and an amount of pages to fit your data. The amount of nodes is hardcoded, but you can edit the variable, which is*acceptable_number_of_nodes_in_page*. Ideally you will work with up to a couple hundred logs, but if you choose to expand the above variables, the sky's the limit.
 
 Log4view accepts a file path to your data, and a secondary key. The tool will then create main nodes made up of secondary keys, and sub-nodes of the main outer key of your data structure.
 
